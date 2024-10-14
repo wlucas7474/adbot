@@ -1,11 +1,13 @@
-TODO:
+MINIMUM:
 - Fix Leaderboards
 - Write help messages for !help
-- Split out of god class
 - Bake into single executable to easily run bot
 
-ROADMAP:
+STRETCH:
 - Show XP multiplier on each channel
 - Automated backups for data.json
 - Badges for XP leaders
 - Fetch and display details about media within category
+
+TECH DEBT:
+- Split out of god class

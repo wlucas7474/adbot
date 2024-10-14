@@ -16,7 +16,7 @@ def load_data():
     except FileNotFoundError:
         return {
             "seasons": {},
-            "current_season": datetime.now().strftime("%Y"),
+            "current_season": int(datetime.now().strftime("%Y")),
             "all_time_xp": {},
             "last_activity": None
         }
@@ -75,8 +75,6 @@ async def award_xp_for_unread_messages(channel):
 
 @bot.event
 async def on_ready():
-    print(f'Logged in as {bot.user.name}')
-
     for channel_id in xp_per_channel.keys():
         channel = bot.get_channel(channel_id)
         if channel:
@@ -152,14 +150,16 @@ async def subtract_xp(ctx, member: discord.Member, amount: int):
 @bot.command(name='leaderboard')
 async def leaderboard(ctx):
     sorted_users = sorted(user_xp.items(), key=lambda x: x[1], reverse=True)
-    leaderboard_message = "🏆 **Leaderboard** 🏆\n"
+    leaderboard_message_title = "🏆 **Leaderboard** 🏆\n"
+    leaderboard_message = leaderboard_message_title
+    leaderboard_message_empty = "No xp to display. Get to it!"
 
     for idx, (user_id, xp) in enumerate(sorted_users, start=1):
         member = ctx.guild.get_member(int(user_id))
         if member:
             leaderboard_message += f"{idx}. {member.mention} - {xp} xp this season\n"
 
-    await ctx.send(leaderboard_message or "No xp to display.")
+    await ctx.send(leaderboard_message_empty if leaderboard_message == leaderboard_message_title else leaderboard_message)
 
 @tasks.loop(hours=24)
 async def check_season_rollover():
