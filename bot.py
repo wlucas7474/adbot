@@ -4,7 +4,6 @@ import os
 
 from datetime import datetime
 from discord.ext import commands, tasks
-from dotenv import load_dotenv
 
 def load_data():
     try:
@@ -27,7 +26,8 @@ def save_data(data):
         json.dump(data, f)
     data["last_activity"] = datetime.fromisoformat(data["last_activity"])
 
-load_dotenv()
+with open('config.json', 'r') as file:
+    config = json.load(file)
 
 intents = discord.Intents.default()
 intents.guilds = True
@@ -36,21 +36,10 @@ intents.messages = True
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-xp_per_channel = {
-    int(os.getenv('MOVIES_ID')): 7,
-    int(os.getenv('GAMES_ID')): 38,
-    int(os.getenv('BOOKS_ID')): 25,
-    int(os.getenv('SHOWS_ID')): 30,
-    int(os.getenv('COMICS_MANGA_ID')): 2,
-    int(os.getenv('ALBUMS_ID')): 2,
-    int(os.getenv('PODCASTS_ID')): 2,
-    int(os.getenv('AUDIO_BOOKS_ID')): 18,
-    int(os.getenv('EXERCISE_ID')): 1,
-}
-
 data = load_data()
 user_xp = data["seasons"].setdefault(str(data["current_season"]), {})
 total_xp = data["all_time_xp"].setdefault("total", {})
+xp_per_channel = {int(channel_id): data['xp'] for channel_id, data in config['channel_xp'].items() if 'xp' in data}
 
 async def award_xp_for_unread_messages(channel):
     last_activity = data["last_activity"]
@@ -185,4 +174,4 @@ async def xp_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send(f'{ctx.author.mention}, you do not have permission to use this command.')
 
-bot.run(os.getenv('BOT_TOKEN'))
+bot.run(config['bot_token'])

@@ -1,7 +1,6 @@
 MINIMUM:
 - Write help messages for !help
 - Bake into single executable to easily run bot
-  - Separate XP multiplier values into the .env (or some other changeable config, maybe .ini)
 
 STRETCH:
 - Show XP multiplier on each channel
