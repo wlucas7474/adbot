@@ -1,0 +1,12 @@
+TODO:
+- Test season change
+- Test automatic rollover at end of year
+- Fix Leaderboards
+- Write help messages for !help
+- Split out of god class
+
+ROADMAP:
+- Show XP multiplier on each channel
+- Automated backups for data.json
+- Badges for XP leaders
+- Fetch and display details about media within category
