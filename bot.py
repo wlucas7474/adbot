@@ -37,13 +37,14 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 xp_per_channel = {
     int(os.getenv('MOVIES_ID')): 7,
-    int(os.getenv('GAME_ID')): 38,
-    int(os.getenv('BOOK_ID')): 25,
-    int(os.getenv('AUDIO_BOOK_ID')): 18,
-    int(os.getenv('TV_SHOW_ID')): 30,
-    int(os.getenv('ALBUM_ID')): 2,
-    int(os.getenv('COMIC_ID')): 2,
+    int(os.getenv('GAMES_ID')): 38,
+    int(os.getenv('BOOKS_ID')): 25,
+    int(os.getenv('SHOWS_ID')): 30,
+    int(os.getenv('COMICS_MANGA_ID')): 2,
+    int(os.getenv('ALBUMS_ID')): 2,
     int(os.getenv('PODCASTS_ID')): 2,
+    int(os.getenv('AUDIO_BOOKS_ID')): 18,
+    int(os.getenv('EXERCISE_ID')): 1,
 }
 
 data = load_data()
@@ -80,6 +81,8 @@ async def on_ready():
         channel = bot.get_channel(channel_id)
         if channel:
             await award_xp_for_unread_messages(channel)
+
+    check_season_rollover.start()
 
 @bot.event
 async def on_message(message):
@@ -165,14 +168,14 @@ async def check_season_rollover():
         previous_season = data["current_season"]
         data["current_season"] = now.year
         data["seasons"][str(data["current_season"])] = {}
-        await bot.get_channel(os.getenv('GENERAL_ID')).send(f'Season {previous_season} has ended, and Season {data["current_season"]} has begun!')
+        await bot.get_channel(int(os.getenv('GENERAL_ID'))).send(f'Season {previous_season} has ended, and Season {data["current_season"]} has begun!')
         save_data(data)
 
 @bot.command(name='seasoninfo')
 async def season_info(ctx):
     now = datetime.now()
     season_info = (f"Current Season: {data['current_season']}\n"
-                   f"Season Ends: {datetime(now.year, 12, 31).strftime("%Y-%m-%d")}")
+                   f"Season Ends: {datetime(now.year, 12, 31).strftime('%Y-%m-%d')}")
     await ctx.send(season_info)
 
 @add_xp.error

@@ -1,9 +1,8 @@
 TODO:
-- Test season change
-- Test automatic rollover at end of year
 - Fix Leaderboards
 - Write help messages for !help
 - Split out of god class
+- Bake into single executable to easily run bot
 
 ROADMAP:
 - Show XP multiplier on each channel
