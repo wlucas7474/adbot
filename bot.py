@@ -34,7 +34,7 @@ intents.guilds = True
 intents.members = True
 intents.messages = True
 intents.message_content = True
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = commands.Bot(command_prefix='!', intents=intents, help_command=commands.DefaultHelpCommand(show_parameter_descriptions=False))
 
 data = load_data()
 user_xp = data["seasons"].setdefault(str(data["current_season"]), {})
@@ -99,19 +99,28 @@ async def on_message(message):
 
 @bot.command(name='xp')
 async def xp_command(ctx):
+    """
+    Show your xp amount this season
+    """
     user_id = str(ctx.author.id)
     xp = user_xp.get(user_id, 0)
     await ctx.send(f'{ctx.author.mention}, you currently have {xp} xp this season.')
 
 @bot.command(name='alltimexp')
 async def all_time_xp_command(ctx):
+    """
+    Show your all-time xp amount
+    """
     user_id = str(ctx.author.id)
     xp = total_xp.get(user_id, 0)
-    await ctx.send(f'{ctx.author.mention}, you have a total of {xp} xp all time.')
+    await ctx.send(f'{ctx.author.mention}, you have a total of {xp} xp all-time.')
 
 @bot.command(name='addxp')
 @commands.has_permissions(administrator=True)
 async def add_xp(ctx, member: discord.Member, amount: int):
+    """
+    Adds xp to member
+    """
     user_id = str(member.id)
     if user_id not in user_xp:
         user_xp[user_id] = 0
@@ -126,6 +135,9 @@ async def add_xp(ctx, member: discord.Member, amount: int):
 @bot.command(name='subtractxp')
 @commands.has_permissions(administrator=True)
 async def subtract_xp(ctx, member: discord.Member, amount: int):
+    """
+    Subtracts xp from member
+    """
     user_id = str(member.id)
     if user_id not in user_xp:
         user_xp[user_id] = 0
@@ -139,6 +151,9 @@ async def subtract_xp(ctx, member: discord.Member, amount: int):
 
 @bot.command(name='leaderboard')
 async def leaderboard(ctx):
+    """
+    Display leaderboard
+    """
     sorted_users = sorted(user_xp.items(), key=lambda x: x[1], reverse=True)
     leaderboard_message_title = "🏆 **Leaderboard** 🏆\n"
     leaderboard_message = leaderboard_message_title
@@ -163,6 +178,9 @@ async def check_season_rollover():
 
 @bot.command(name='seasoninfo')
 async def season_info(ctx):
+    """
+    Display season info
+    """
     now = datetime.now()
     season_info = (f"Current Season: {data['current_season']}\n"
                    f"Season Ends: {datetime(now.year, 12, 31).strftime('%Y-%m-%d')}")

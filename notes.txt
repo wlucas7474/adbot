@@ -1,5 +1,4 @@
 MINIMUM:
-- Write help messages for !help
 - Bake into single executable to easily run bot
 
 STRETCH:
