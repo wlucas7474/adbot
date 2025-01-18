@@ -40,6 +40,7 @@ data = load_data()
 user_xp = data["seasons"].setdefault(str(data["current_season"]), {})
 total_xp = data["all_time_xp"].setdefault("total", {})
 xp_per_channel = {int(channel_id): data['xp'] for channel_id, data in config['channel_xp'].items() if 'xp' in data}
+announcement_channel = {int(channel_id) for channel_id, data in config['channel_xp'].items() if 'announcements' in data}
 
 async def award_xp_for_unread_messages(channel):
     last_activity = data["last_activity"]
@@ -173,7 +174,7 @@ async def check_season_rollover():
         previous_season = data["current_season"]
         data["current_season"] = now.year
         data["seasons"][str(data["current_season"])] = {}
-        await bot.get_channel(int(os.getenv('GENERAL_ID'))).send(f'Season {previous_season} has ended, and Season {data["current_season"]} has begun!')
+        await bot.get_channel(announcement_channel).send(f'Season {previous_season} has ended, and Season {data["current_season"]} has begun!')
         save_data(data)
 
 @bot.command(name='seasoninfo')
