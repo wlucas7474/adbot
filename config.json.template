@@ -1,0 +1,16 @@
+{
+    "channel_xp": {
+        "12345": {
+            "name": "general",
+            "announcements": true
+        },
+        "23456": {
+            "name": "channel1",
+            "xp": 1
+        },
+        "34567": {
+            "name": "channel2",
+            "xp": 2
+        }
+    }
+}
